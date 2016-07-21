@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
-		<file>/tmp/myLogFile.log</file>
-		<append>true</append>
-		<encoder>
-			<pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
-		</encoder>
-	</appender>
-
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/tmp/aggregator.log</file>
+		<file>/tmp//aggregator.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH} [%thread] %-5level %logger{36} -
-				%msg%n
+			<Pattern>%d{yyyy-MM-dd_HH} [%thread] %-5level %logger{36} - %msg%n
 			</Pattern>
 		</encoder>
-		<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+		<!-- Add below mentioned code to add data in json format -->
+		<!-- <encoder class="net.logstash.logback.encoder.LogstashEncoder" /> -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/tmp/aggregator.%d{yyyy-MM-dd}.%i.log
+			<fileNamePattern>/tmp/aggregator.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+	</appender>
+	
+	<appender name="ASYNCFILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/aggregators.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{yyyy-MM-dd_HH-mm-ss} [%thread] %-5level %logger{36} -	%msg%n
+			</Pattern>
+		</encoder>
+		<!-- Add below mentioned code to add data in json format -->
+		<!-- <encoder class="net.logstash.logback.encoder.LogstashEncoder" /> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/tmp/aggregators.%d{yyyy-MM-dd}.%i.log.gz
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -29,8 +42,18 @@
 
 	</appender>
 
-	<root level="TRACE">
+	<root level="INFO">
 		<appender-ref ref="FILE" />
+	</root>
+
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ASYNCFILE" />
+		<discardingThreshold>0</discardingThreshold>
+		 <queueSize>500</queueSize>
+	</appender>
+
+	<root level="ERROR">
+		<appender-ref ref="ASYNC" />
 	</root>
 
 </configuration>

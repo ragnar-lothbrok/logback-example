@@ -3,11 +3,6 @@ package com.logbacktest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 
- * @author Abhijit Ghosh
- * @version 1.0
- */
 public class LogbackHello {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogbackHello.class);
 
