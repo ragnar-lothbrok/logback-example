@@ -20,12 +20,13 @@
 		</rollingPolicy>
 
 	</appender>
-	
+
 	<appender name="ASYNCFILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/tmp/aggregators.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH-mm-ss} [%thread] %-5level %logger{36} -	%msg%n
+			<Pattern>%d{yyyy-MM-dd_HH-mm-ss} [%thread] %-5level %logger{36} -
+				%msg%n
 			</Pattern>
 		</encoder>
 		<!-- Add below mentioned code to add data in json format -->
@@ -36,7 +37,7 @@
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<!-- or whenever the file size reaches 50MB -->
-				<maxFileSize>10MB</maxFileSize>
+				<maxFileSize>1GB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 
@@ -49,7 +50,7 @@
 	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
 		<appender-ref ref="ASYNCFILE" />
 		<discardingThreshold>0</discardingThreshold>
-		 <queueSize>500</queueSize>
+		<queueSize>500</queueSize>
 	</appender>
 
 	<root level="ERROR">
