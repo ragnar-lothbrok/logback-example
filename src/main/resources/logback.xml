@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+		<file>/tmp/myLogFile.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/aggregator.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{yyyy-MM-dd_HH} [%thread] %-5level %logger{36} -
+				%msg%n
+			</Pattern>
+		</encoder>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/tmp/aggregator.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+	</appender>
+
+	<root level="TRACE">
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>
