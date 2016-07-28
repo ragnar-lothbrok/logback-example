@@ -1,38 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<appender name="FILE"
+	<appender name="FILE_METRIC"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/tmp//aggregator.log</file>
+		<file>/home/raghunandangupta/Desktop/CSV/ALLCSV//serevr.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH} [%thread] %-5level %logger{36} - %msg%n
-			</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %class{36}.%M %L - %msg%n </Pattern>
 		</encoder>
-		<!-- Add below mentioned code to add data in json format -->
-		<!-- <encoder class="net.logstash.logback.encoder.LogstashEncoder" /> -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/tmp/aggregator.%d{yyyy-MM-dd}.%i.log.gz
-			</fileNamePattern>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<!-- or whenever the file size reaches 50MB -->
-				<maxFileSize>10MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-
-	</appender>
-
-	<appender name="ASYNCFILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/tmp/aggregators.log</file>
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH-mm-ss} [%thread] %-5level %logger{36} -
-				%msg%n
-			</Pattern>
-		</encoder>
-		<!-- Add below mentioned code to add data in json format -->
-		<!-- <encoder class="net.logstash.logback.encoder.LogstashEncoder" /> -->
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/tmp/aggregators.%d{yyyy-MM-dd}.%i.log.gz
+			<fileNamePattern>/home/raghunandangupta/Desktop/CSV/ALLCSV/server.%d{yyyy-MM-dd}.%i.log.gz
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -43,18 +18,49 @@
 
 	</appender>
 
-	<root level="INFO">
-		<appender-ref ref="FILE" />
-	</root>
-
-	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-		<appender-ref ref="ASYNCFILE" />
-		<discardingThreshold>0</discardingThreshold>
-		<queueSize>500</queueSize>
+	<appender name="Console-Appender" class="ch.qos.logback.core.ConsoleAppender">
+		<layout>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %class{36}.%M %L - %msg%n</pattern>
+		</layout>
 	</appender>
 
-	<root level="ERROR">
+	<appender name="ASYNCFILE_ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/home/raghunandangupta/Desktop/CSV/ALLCSV/error.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern> %d{HH:mm:ss.SSS} [%thread] %-5level %class{36}.%M %L - %msg%n </Pattern>
+		</encoder>
+		<!-- Add below mentioned code to add data in json format -->
+		<!-- <encoder class="net.logstash.logback.encoder.LogstashEncoder" /> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/home/raghunandangupta/Desktop/CSV/ALLCSV/error.%d{yyyy-MM-dd}.%i.log.gz
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 50MB -->
+				<maxFileSize>1GB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="ASYNCFILE_ERROR" />
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>500</queueSize>
+		<includeCallerData>true</includeCallerData>
+	</appender>
+
+	<logger name="metriclogger" level="DEBUG" additivity="false">
+		<appender-ref ref="FILE_METRIC" />
+	</logger>
+
+	<logger name="errorlogger" level="INFO" additivity="false">
 		<appender-ref ref="ASYNC" />
+	</logger>
+
+
+	<root level="INFO">
+		<appender-ref ref="Console-Appender" />
 	</root>
 
 </configuration>

@@ -4,22 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LogbackHello {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogbackHello.class);
+	private static final Logger ERROR_LOGGER = LoggerFactory.getLogger("errorlogger");
+	private static final Logger METRIC_LOGGER = LoggerFactory.getLogger("metriclogger");
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		LOGGER.trace("Hello World!");
-
-		for (int i = 0; i < 2000000000; i++) {
-			String name = "Testing Logging";
-			LOGGER.debug("Hi, {}", name);
-			LOGGER.info("Welcome to the Logback test.");
-			LOGGER.warn("Logback warning message.");
-			LOGGER.error("Logback error message.");
+		for (int i = 0; i < 20; i++) {
+			METRIC_LOGGER.debug("Welcome to the Logback test.");
 			A a = new A();
-			LOGGER.debug("{}",a);
+			ERROR_LOGGER.error(" Error occured {}",a);
+			ERROR_LOGGER.info(" Error occured {}",a);
 		}
 	}
 
